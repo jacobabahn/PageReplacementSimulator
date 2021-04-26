@@ -10,7 +10,7 @@ const Body = () => {
         body: {
             height: "100%"
         },
-        card: {
+        paper: {
             backgroundColor: "#303030",
             margin: "25px",
             height: "85vh"
@@ -24,7 +24,7 @@ const Body = () => {
 
     return(
         <div className={classes.body}>
-            <Paper className={classes.card}>
+            <Paper className={classes.paper}>
                 <Main />
             </Paper>
         </div>
