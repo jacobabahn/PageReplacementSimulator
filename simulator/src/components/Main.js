@@ -46,7 +46,15 @@ const Main = () => {
         card: {
             width: "60vw",
             backgroundColor: "#202020"
-        }
+        },
+        plusBtn: {
+            transition: ".2s",
+            "&:hover": {
+                color: "#3f51b5",
+                cursor: "pointer",
+                transform: "scale(1.3)"
+            } 
+        },
     })
 
     const updatePolicy = () => {
@@ -86,10 +94,13 @@ const Main = () => {
                 temp = prevVal
 
                 if (policy === 'LRU') {
-                    for (let i = 0; i < lru.length; i++) {
-                        if (lru[i] === newVal) {
-                            lru.splice(i, 1)
-                            lru.splice(0, newVal)
+                    let copy = lru.slice()
+                    for (let i = 0; i < cache.length; i++) {
+                        alert(cache[i], newVal)
+                        if (cache[i] === (newVal + ', ') || cache[i] === newVal) {
+                            copy.splice(i, 1)
+                            copy.push(newVal)
+                            cache.push(copy)
                         }
                     }
                 }
@@ -119,29 +130,14 @@ const Main = () => {
             else if (cache.length >= maxCacheLen && policy === 'LRU') {
                 hits.push("Capacity Miss")
                 capMiss++
-                let lastVal = lru[lru.length - 1]
 
-                let index1 = prevVal.indexOf(lastVal + ', ')
-                let index2 = prevVal.indexOf(lastVal)
-
-                let copy = prevVal.slice()
-                if (index1 != -1) {
-                    newVal = newVal + ', '
-                    copy[index1] = newVal
-                }
-                if (index2 != -1) {
-                    if (prevVal[index2].includes(', ')) {
-                        copy[index2] = newVal + ', '
-                    }
-                    else {
-                        copy[index2] = newVal
-                    }
-                }
-
+                temp = prevVal.concat([newVal])
+                temp.shift()
+                temp[temp.length - 2] = temp[temp.length - 2] + ', '
 
                 lru.pop()
                 lru.unshift(newVal)
-                cache.push(copy)
+                cache.push(temp)
 
             }
             else {
@@ -173,20 +169,22 @@ const Main = () => {
 
     return(
         <div className={classes.text}>
-            <Input className={classes.input} value={inputPolicy} onChange={(event) => setInputPolicy(event.target.value)} placeholder="Policy" label="Policy" />
-            <AddIcon onClick={() => updatePolicy()}/>
+            <div>
+                <Input className={classes.input} value={inputPolicy} onChange={(event) => setInputPolicy(event.target.value)} placeholder="Policy" label="Policy" />
+                <AddIcon className={classes.plusBtn} onClick={() => updatePolicy()}/>
 
-            <Input className={classes.input} value={inputPage} onChange={(event) => setInputPage(event.target.value)} placeholder="Page Number" label="Page" />
-            <AddIcon onClick={() => updateRows()}/>
+                <Input className={classes.input} value={inputPage} onChange={(event) => setInputPage(event.target.value)} placeholder="Page Number" label="Page" />
+                <AddIcon className={classes.plusBtn} onClick={() => updateRows()}/>
 
-            <Input className={classes.input} value={inputCacheSize} onChange={(event) => setInputCacheSize(event.target.value)} placeholder="Max Cache Size" label="MaxCache" />
-            {/* <input value={inputPage} onChange={(event) => setInputPage(event.target.value)} label="Page" /> */}
-            <AddIcon onClick={() => updateMaxCacheSize()}/>
+                <Input className={classes.input} value={inputCacheSize} onChange={(event) => setInputCacheSize(event.target.value)} placeholder="Max Cache Size" label="MaxCache" />
+                {/* <input value={inputPage} onChange={(event) => setInputPage(event.target.value)} label="Page" /> */}
+                <AddIcon className={classes.plusBtn} onClick={() => updateMaxCacheSize()}/>
+            </div>
         
             <Table className={classes.table}>
             <Card className={classes.card}>
                 <TableHead className={classes.thead}>
-                    <TableRow>
+                    <TableRow classname="epicFont">
                         <TableCell width="50%" className={classes.thead} align="left">P#</TableCell>
                         <TableCell width="50%" className={classes.thead} align="left">Hit/Miss</TableCell>
                         <TableCell width="50%" className={classes.thead} align="left">Cache</TableCell>
@@ -194,7 +192,7 @@ const Main = () => {
                 </TableHead>
 
                 {pages.map((page, index)=> 
-                    <TableRow>
+                    <TableRow classname="epicFont">
                         <TableCell className={classes.text} align="left">{page.value}</TableCell>
                         <TableCell className={classes.text} align="left">{hits[index]}</TableCell>
                         <TableCell className={classes.text} align="left">{cache[index]}

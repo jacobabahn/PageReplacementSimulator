@@ -21,7 +21,7 @@ const Calculations = (props) => {
 
     return (
         <Card className={classes.container}>
-            <CardContent>
+            <CardContent className="epicFont">
                 <h2>Calculations</h2>
                 <h3>Hit Percentage = {Math.round((props.hits / (props.total - 1)) * 100)}%</h3>
                 <h3>Capacity Miss Percentage = {Math.round((props.capMiss / (props.total - 1)) * 100)}%</h3>

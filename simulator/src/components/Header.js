@@ -13,7 +13,6 @@ const Header = theme => {
         text: {
             margin: '0 auto',
             color: '#D3D3D3',
-            fontFamily: "Volkorn",
             fontSize: "2em",
             fontWeight: "100"
         }
@@ -22,7 +21,7 @@ const Header = theme => {
     const classes = useStyles()
 
     return(
-        <div>
+        <div className="epicFont">
             <AppBar className={classes.nav}>
                 <Toolbar>
                     <Typography className={classes.text}>
