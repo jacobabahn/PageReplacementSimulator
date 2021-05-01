@@ -30,10 +30,12 @@ const Main = () => {
             display: "flex",
             float: "left",
             marginLeft: "30px",
+            borderRadius: "100px"
         },
-        text: {
+        cellText: {
             color: "#D3D3D3",
             fontSize: "1.2em",
+            borderBottom: "0px"
         },
         thead: {
             color: "#D3D3D3",
@@ -48,12 +50,16 @@ const Main = () => {
             backgroundColor: "#202020"
         },
         plusBtn: {
+            color: "D3D3D3",
             transition: ".2s",
             "&:hover": {
                 color: "#3f51b5",
                 cursor: "pointer",
-                transform: "scale(1.3)"
-            } 
+                transform: "scale(1.5)"
+            },
+        cellCard: {
+            backgroundColor: "#303030"
+        } 
         },
     })
 
@@ -79,7 +85,6 @@ const Main = () => {
             hits.push('Compulsory Miss')
             lru.push(newVal)
             compMiss++
-            rowCount++
         }
         
         else {
@@ -88,23 +93,27 @@ const Main = () => {
                     ...pages,
                     { value: inputPage }
                 ])
-                cache.push(prevVal)
                 hits.push('Hit')
                 numHits++
                 temp = prevVal
+                let lastCache = cache[cache.length - 1]
 
                 if (policy === 'LRU') {
-                    let copy = lru.slice()
-                    for (let i = 0; i < cache.length; i++) {
-                        alert(cache[i], newVal)
-                        if (cache[i] === (newVal + ', ') || cache[i] === newVal) {
+                    let copy = lastCache.slice()
+                    
+                    for (let i = 0; i < lastCache.length; i++) {
+                        if (lastCache[i] === (newVal + ', ') || lastCache[i] === newVal) {
+                            copy[copy.length - 1] = copy[copy.length - 1] + ', '
                             copy.splice(i, 1)
                             copy.push(newVal)
-                            cache.push(copy)
+                            cache.push([copy])
+                            rowCount++
+                            return
                         }
                     }
                 }
                 rowCount++
+                cache.push(prevVal)
                 return
             }
 
@@ -121,8 +130,8 @@ const Main = () => {
                 // newVal = inputPage
                 hits.push("Capacity Miss")
                 let copy = prevVal.slice()
-                copy.pop()
-                temp = copy.concat([newVal])
+                copy.shift()
+                temp = [newVal + ', '].concat(copy)
                 // temp[temp.length - 2] = temp[temp.length - 2] + ', '
                 cache.push(temp)
                 capMiss++
@@ -144,10 +153,15 @@ const Main = () => {
                 hits.push("Compulsory Miss")
                 lru.unshift(newVal)
                 compMiss++
-                // newVal = newVal + ', '
-                temp = prevVal.concat([newVal])
-                temp[temp.length - 2] = temp[temp.length - 2] + ', '
-                cache.push(temp)
+                if (policy === 'LIFO') {
+                    ye()
+                    temp = [newVal + ', '].concat(prevVal)
+                    cache.push(temp)
+                } else {
+                    temp = prevVal.concat([newVal])
+                    temp[temp.length - 2] = temp[temp.length - 2] + ', '
+                    cache.push(temp)
+                }
             }
         }
 
@@ -193,9 +207,9 @@ const Main = () => {
 
                 {pages.map((page, index)=> 
                     <TableRow classname="epicFont">
-                        <TableCell className={classes.text} align="left">{page.value}</TableCell>
-                        <TableCell className={classes.text} align="left">{hits[index]}</TableCell>
-                        <TableCell className={classes.text} align="left">{cache[index]}
+                        <TableCell className={classes.cellText} align="left">{page.value}</TableCell>
+                        <TableCell className={classes.cellText} align="left">{hits[index]}</TableCell>
+                        <TableCell className={classes.cellText} align="left">{cache[index]}
                         </TableCell>
                     </TableRow>
                 )}
