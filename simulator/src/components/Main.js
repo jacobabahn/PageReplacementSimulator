@@ -35,11 +35,12 @@ const Main = () => {
         cellText: {
             color: "#D3D3D3",
             fontSize: "1.2em",
-            borderBottom: "0px"
+            borderBottom: "solid #282828 1px"
         },
         thead: {
             color: "#D3D3D3",
             fontSize: "1.4em",
+            borderBottom: "Solid #282828 2px"
         },
         input: {
             margin: "30px",
@@ -107,6 +108,7 @@ const Main = () => {
                             copy.splice(i, 1)
                             copy.push(newVal)
                             cache.push([copy])
+                            alert(cache[cache.length - 1])
                             rowCount++
                             return
                         }
@@ -118,7 +120,6 @@ const Main = () => {
             }
 
             if (cacheLen >= maxCacheLen && policy === 'FIFO') {
-                // newVal = inputPage
                 hits.push("Capacity Miss")
                 temp = prevVal.concat([newVal])
                 temp[temp.length - 2] = temp[temp.length - 2] + ', '
@@ -127,12 +128,10 @@ const Main = () => {
                 capMiss++
             }
             else if (cache.length >= maxCacheLen && policy === 'LIFO') {
-                // newVal = inputPage
                 hits.push("Capacity Miss")
                 let copy = prevVal.slice()
                 copy.shift()
                 temp = [newVal + ', '].concat(copy)
-                // temp[temp.length - 2] = temp[temp.length - 2] + ', '
                 cache.push(temp)
                 capMiss++
             }
@@ -158,13 +157,13 @@ const Main = () => {
                     temp = [newVal + ', '].concat(prevVal)
                     cache.push(temp)
                 } else {
+
                     temp = prevVal.concat([newVal])
                     temp[temp.length - 2] = temp[temp.length - 2] + ', '
                     cache.push(temp)
                 }
             }
         }
-
         cacheLen++
         rowCount++
             
