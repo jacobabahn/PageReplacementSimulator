@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { makeStyles } from "@material-ui/core/styles"
 import AddIcon from '@material-ui/icons/Add'
-import { Input, TableCell, Table, TableRow, TableHead, Card, CardContent } from '@material-ui/core'
+import { Input, TableCell, Table, TableRow, TableHead, Card, CardContent, Button, Menu, MenuItem } from '@material-ui/core'
 
 import Calculations from './Calculations'
 
@@ -18,7 +18,8 @@ let policy = 'FIFO'
 
 const Main = () => {
     const [pages, setPages] = useState([])
-
+    
+    const [anchorEl, setAnchorEl] = useState(null)
     const [inputPolicy, setInputPolicy] = useState()
     const [inputPage, setInputPage] = useState()
     const [inputCacheSize, setInputCacheSize] = useState()
@@ -43,8 +44,18 @@ const Main = () => {
             borderBottom: "Solid #282828 2px"
         },
         input: {
-            margin: "30px",
+            margin: "30px 5px 30px 30px",
             color: 'white'
+        },
+        btn: {
+            color: "#D3D3D3",
+            marginLeft: "30px",
+            marginRight: "20px",
+            border: "solid #202020 1px"
+        },
+        btnItem: {
+            color: "#D3D3D3",
+            backgroundColor: "#282828"
         },
         card: {
             width: "60vw",
@@ -64,8 +75,17 @@ const Main = () => {
         },
     })
 
-    const updatePolicy = () => {
-        policy = inputPolicy
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+      };
+    
+      const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const updatePolicy = (pol) => {
+        policy = pol
+        setAnchorEl(null)
     }
 
     const updateMaxCacheSize = () => {
@@ -90,10 +110,6 @@ const Main = () => {
         
         else {
             if (prevVal.includes(newVal) || prevVal.includes(newVal + ', ')) {
-                setPages([
-                    ...pages,
-                    { value: inputPage }
-                ])
                 hits.push('Hit')
                 numHits++
                 temp = prevVal
@@ -107,15 +123,22 @@ const Main = () => {
                             copy[copy.length - 1] = copy[copy.length - 1] + ', '
                             copy.splice(i, 1)
                             copy.push(newVal)
-                            cache.push([copy])
-                            alert(cache[cache.length - 1])
+                            cache.push(copy)
                             rowCount++
+                            setPages([
+                                ...pages,
+                                { value: inputPage }
+                            ])
                             return
                         }
                     }
                 }
                 rowCount++
                 cache.push(prevVal)
+                setPages([
+                    ...pages,
+                    { value: inputPage }
+                ])
                 return
             }
 
@@ -183,8 +206,22 @@ const Main = () => {
     return(
         <div className={classes.text}>
             <div>
-                <Input className={classes.input} value={inputPolicy} onChange={(event) => setInputPolicy(event.target.value)} placeholder="Policy" label="Policy" />
-                <AddIcon className={classes.plusBtn} onClick={() => updatePolicy()}/>
+                {/* <Input className={classes.input} value={inputPolicy} onChange={(event) => setInputPolicy(event.target.value)} placeholder="Policy" label="Policy" />
+                <AddIcon className={classes.plusBtn} onClick={() => updatePolicy()}/> */}
+                <Button className={classes.btn}aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+                    {policy}
+                </Button>
+                <Menu
+                    id="simple-menu"
+                    anchorEl={anchorEl}
+                    keepMounted
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                >
+                    <MenuItem className={classes.btnInput} onClick={() => updatePolicy('FIFO')}>FIFO</MenuItem>
+                    <MenuItem className={classes.btnInput} onClick={() => updatePolicy('LIFO')}>LIFO</MenuItem>
+                    <MenuItem className={classes.btnInput} onClick={() => updatePolicy('LRU')}>LRU</MenuItem>
+                </Menu>
 
                 <Input className={classes.input} value={inputPage} onChange={(event) => setInputPage(event.target.value)} placeholder="Page Number" label="Page" />
                 <AddIcon className={classes.plusBtn} onClick={() => updateRows()}/>
