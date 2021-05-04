@@ -93,7 +93,11 @@ const Main = () => {
     }
 
     const updateRows = () => {
+        if (!Number.isInteger(Number(inputPage)) || !Number.isInteger(Number(inputCacheSize))) {
+            return
+        }
 
+        // console.log(Number.isInteger(Number(inputPage)))
         let newVal = inputPage
         let prevVal = cache[cache.length - 1]
         let temp = []
