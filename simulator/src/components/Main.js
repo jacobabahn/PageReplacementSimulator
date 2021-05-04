@@ -176,7 +176,6 @@ const Main = () => {
                 lru.unshift(newVal)
                 compMiss++
                 if (policy === 'LIFO') {
-                    ye()
                     temp = [newVal + ', '].concat(prevVal)
                     cache.push(temp)
                 } else {
