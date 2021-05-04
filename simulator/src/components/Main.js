@@ -31,7 +31,7 @@ const Main = () => {
             display: "flex",
             float: "left",
             marginLeft: "30px",
-            borderRadius: "100px"
+            borderRadius: "100px",
         },
         cellText: {
             color: "#D3D3D3",
@@ -59,7 +59,7 @@ const Main = () => {
         },
         card: {
             width: "60vw",
-            backgroundColor: "#202020"
+            backgroundColor: "#202020",
         },
         plusBtn: {
             color: "D3D3D3",
