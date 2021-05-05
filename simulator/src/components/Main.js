@@ -119,7 +119,7 @@ const Main = () => {
                 temp = prevVal
                 let lastCache = cache[cache.length - 1]
 
-                if (policy === 'LRU') {
+                if (policy === 'LRU' && rowCount > 1) {
                     let copy = lastCache.slice()
                     
                     for (let i = 0; i < lastCache.length; i++) {
@@ -146,7 +146,8 @@ const Main = () => {
                 return
             }
 
-            if (cacheLen >= maxCacheLen && policy === 'FIFO') {
+            // FIFO cache replacement when the cache is full
+            if (cache[cache.length -  1].length >= maxCacheLen && policy === 'FIFO') {
                 hits.push("Capacity Miss")
                 temp = prevVal.concat([newVal])
                 temp[temp.length - 2] = temp[temp.length - 2] + ', '
@@ -154,7 +155,8 @@ const Main = () => {
                 cache.push(temp)
                 capMiss++
             }
-            else if (cache.length >= maxCacheLen && policy === 'LIFO') {
+            // LIFO cache replacement when the cache is full
+            else if (cache[cache.length - 1].length >= maxCacheLen && policy === 'LIFO') {
                 hits.push("Capacity Miss")
                 let copy = prevVal.slice()
                 copy.shift()
@@ -162,7 +164,8 @@ const Main = () => {
                 cache.push(temp)
                 capMiss++
             }
-            else if (cache.length >= maxCacheLen && policy === 'LRU') {
+            // LRU cache replacement when the cache is full
+            else if (cache[cache.length - 1].length >= maxCacheLen && policy === 'LRU') {
                 hits.push("Capacity Miss")
                 capMiss++
 
