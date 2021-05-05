@@ -13,7 +13,8 @@ const Body = () => {
         paper: {
             backgroundColor: "#303030",
             margin: "25px",
-            height: "85vh"
+            minHeight: "85vh",
+            overflow: "auto",
         },
         text: {
             font: "40px",
