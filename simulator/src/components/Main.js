@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { makeStyles } from "@material-ui/core/styles"
 import AddIcon from '@material-ui/icons/Add'
-import { Input, TableCell, Table, TableRow, TableHead, Card, CardContent, Button, Menu, MenuItem } from '@material-ui/core'
+import { Input, TableCell, Table, TableRow, TableHead, Card, Button, Menu, MenuItem, InputLabel } from '@material-ui/core'
 
 import Calculations from './Calculations'
 
@@ -12,7 +12,7 @@ let rowCount = 0
 let numHits = 0
 let capMiss = 0
 let compMiss = 0
-let maxCacheLen = 5
+// let maxCacheLen = 5
 let cacheLen = 0
 let policy = 'FIFO'
 
@@ -88,8 +88,9 @@ const Main = () => {
         setAnchorEl(null)
     }
 
-    const updateMaxCacheSize = () => {
-        maxCacheLen = inputCacheSize
+    const updateMaxCacheSize = (event) => {
+        setInputCacheSize(event)
+        // maxCacheLen = inputCacheSize
     }
 
     const updateRows = () => {
@@ -147,7 +148,7 @@ const Main = () => {
             }
 
             // FIFO cache replacement when the cache is full
-            if (cache[cache.length -  1].length >= maxCacheLen && policy === 'FIFO') {
+            if (cache[cache.length -  1].length >= inputCacheSize && policy === 'FIFO') {
                 hits.push("Capacity Miss")
                 temp = prevVal.concat([newVal])
                 temp[temp.length - 2] = temp[temp.length - 2] + ', '
@@ -156,7 +157,7 @@ const Main = () => {
                 capMiss++
             }
             // LIFO cache replacement when the cache is full
-            else if (cache[cache.length - 1].length >= maxCacheLen && policy === 'LIFO') {
+            else if (cache[cache.length - 1].length >= inputCacheSize && policy === 'LIFO') {
                 hits.push("Capacity Miss")
                 let copy = prevVal.slice()
                 copy.shift()
@@ -165,7 +166,7 @@ const Main = () => {
                 capMiss++
             }
             // LRU cache replacement when the cache is full
-            else if (cache[cache.length - 1].length >= maxCacheLen && policy === 'LRU') {
+            else if (cache[cache.length - 1].length >= inputCacheSize && policy === 'LRU') {
                 hits.push("Capacity Miss")
                 capMiss++
 
@@ -203,10 +204,6 @@ const Main = () => {
         
     }
 
-    const ye = () => {
-        alert("I have been clicked!")
-    }
-
     const classes = useStyles()
 
     return(
@@ -229,12 +226,13 @@ const Main = () => {
                     <MenuItem className={classes.btnInput} onClick={() => updatePolicy('LRU')}>LRU</MenuItem>
                 </Menu>
 
-                <Input className={classes.input} value={inputPage} onChange={(event) => setInputPage(event.target.value)} placeholder="Page Number" label="Page" />
+                <Input className={classes.input} value={inputCacheSize} onChange={(event) => updateMaxCacheSize(event.target.value)} placeholder="Max Cache Size" label="MaxCache" />
+                {/* <input value={inputPage} onChange={(event) => setInputPage(event.target.value)} label="Page" /> */}
+                {/* <AddIcon className={classes.plusBtn} onClick={() => updateMaxCacheSize()}/> */}
+
+                <Input className={classes.input} value={inputPage} onChange={(event) => setInputPage(event.target.value)} onKeyDown={(event) => event.key === 'Enter' ? updateRows() : console.log('Not Enter')} placeholder="Page Number" label="Page" />
                 <AddIcon className={classes.plusBtn} onClick={() => updateRows()}/>
 
-                <Input className={classes.input} value={inputCacheSize} onChange={(event) => setInputCacheSize(event.target.value)} placeholder="Max Cache Size" label="MaxCache" />
-                {/* <input value={inputPage} onChange={(event) => setInputPage(event.target.value)} label="Page" /> */}
-                <AddIcon className={classes.plusBtn} onClick={() => updateMaxCacheSize()}/>
             </div>
         
             <Table className={classes.table}>
