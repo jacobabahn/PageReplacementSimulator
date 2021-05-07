@@ -20,6 +20,7 @@ const Main = () => {
     const [pages, setPages] = useState([])
     
     const [anchorEl, setAnchorEl] = useState(null)
+    const [input, setInput] = useState()
     const [inputPolicy, setInputPolicy] = useState()
     const [inputPage, setInputPage] = useState()
     const [inputCacheSize, setInputCacheSize] = useState()
@@ -77,11 +78,16 @@ const Main = () => {
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
-      };
+      }
     
       const handleClose = () => {
         setAnchorEl(null);
-    };
+    }
+
+    const updateInput = (event) => {
+        setInputPage(event.target.value)
+        setInput(event.target.value)
+    }
 
     const updatePolicy = (pol) => {
         policy = pol
@@ -98,7 +104,7 @@ const Main = () => {
             return
         }
 
-        // console.log(Number.isInteger(Number(inputPage)))
+        setInput('')
         let newVal = inputPage
         let prevVal = cache[cache.length - 1]
         let temp = []
@@ -230,7 +236,7 @@ const Main = () => {
                 {/* <input value={inputPage} onChange={(event) => setInputPage(event.target.value)} label="Page" /> */}
                 {/* <AddIcon className={classes.plusBtn} onClick={() => updateMaxCacheSize()}/> */}
 
-                <Input className={classes.input} value={inputPage} onChange={(event) => setInputPage(event.target.value)} onKeyDown={(event) => event.key === 'Enter' ? updateRows() : console.log('Not Enter')} placeholder="Page Number" label="Page" />
+                <Input className={classes.input} value={input} onChange={(event) => updateInput(event)} onKeyDown={(event) => event.key === 'Enter' ? updateRows() : console.log('Not Enter')} placeholder="Page Number" label="Page" />
                 <AddIcon className={classes.plusBtn} onClick={() => updateRows()}/>
 
             </div>
